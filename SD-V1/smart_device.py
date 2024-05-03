@@ -25,7 +25,7 @@ class SmartDevice(Station):
         if self.is_on and self.broker_ip:
             
             response = self.cmd(f'ping -c 1 {self.broker_ip}')
-            #info(f"{response}\n")
+            info(f"sending message to {self.broker_ip}\n")
 
 
     def start_sending_messages(self):
@@ -42,8 +42,8 @@ def topology():
 
     ap1 = net.addAccessPoint('ap1')
     sta1 = net.addStation('sta1', ip='10.0.0.100')
-    
     sta2 :SmartDevice = net.addStation("sta2", cls=SmartDevice, ip='10.0.0.101')
+
     net.configureWifiNodes()
     
     net.addLink(ap1, sta1)
