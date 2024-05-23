@@ -1,3 +1,4 @@
+import threading
 import time
 import paho.mqtt.client as mqtt
 from mininet.node import Host
@@ -11,8 +12,8 @@ class Device(Host):
         self.__client_name = client_name
         self.__keepalive = keepalive
         self.__mqtt_client = None
-        self.__topic_subscription = topics.value[0][1]
-        self.__topic_to_publish = topics.value[0][1]
+        self.__topic_subscription = topics.value[0]
+        self.__topic_to_publish = topics.value[1]
 
     def start_connection(self):
         mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, self.__client_name)
@@ -24,39 +25,44 @@ class Device(Host):
         mqtt_client.connect(host=self.__broker_ip, port=self.__port, keepalive=self.__keepalive)
         self.__mqtt_client = mqtt_client
         self.__mqtt_client.loop_start()
-        while True:
-            message = "Code 5"
-            self.publish(message)
-            time.sleep(5)
+        self.mqtt_thread = threading.Thread(target=self.publish)
+        self.mqtt_thread.daemon = True
+        self.mqtt_thread.start()
 
-    def on_connect(name, client, userdata, flags, rc, props):
+    def on_connect(self, client, userdata, flags, rc, props=None):
+        print(f'on_connect called with: client={client}, userdata={userdata}, flags={flags}, rc={rc}, props={props}')
         if rc == 0:
-            print(f'Succesfully connected: {client}')
+            print(f'Successfully connected: {client}')
             topic_subscription = userdata['topic_subscription']
             client.subscribe(topic_subscription)
         else:
-            print("Cliente", client)
-            print("Flags", flags) 
-            print("userData", userdata)
-            print("prop", props)
             print(f'Failed Connection! code={rc}')
 
-    def on_subscribe(name, client, userdata, mid, granted_qos, prop):
-        print(f'Cliente Subscribed')
-        print(f'QOS: {granted_qos}')
+    def on_subscribe(self, client, userdata, mid, reason_code_list, properties):
+        print('Client Subscribed')
+        print(f'on_subscribe called with: client={client}, userdata={userdata}, mid={mid}, reason_code_list={reason_code_list}, properties={properties}')
 
-    def on_message(name, client, userdata, message):
+    def on_message(self, client, userdata, message):
         print('Message Received!')
-        print(client)
-        print(message.payload)
+        print(f'Client: {client}')
+        print(f'on_message called with: client={client}, userdata={userdata}, message={message}')
+        print(f'Message payload: {message.payload}')
 
-    def publish(self, message, qos=1):
-        self.__mqtt_client.publish(topic=self.__topic_to_publish, payload=message, qos=qos)
+    def publish(self):
+        qos=1
+        while True:
+            try:
+                message = "Code 5"
+                self.__mqtt_client.publish(topic=self.__topic_to_publish, payload=message, qos=qos)
+                time.sleep(5)
+            except KeyboardInterrupt:
+                self.end_connection()
 
     def end_connection(self):
         try:
             self.__mqtt_client.loop_stop()
             self.__mqtt_client.disconnect()
+            super(Device, self).terminate()
             return True
         except:
             return False
