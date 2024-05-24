@@ -1,5 +1,5 @@
 mqtt_broker_configs = {
-    "HOST": "localhost",
+    "HOST": "test.mosquitto.org",
     "PORT": 1883,
     "KEEPALIVE": 60
 }
