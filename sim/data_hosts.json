@@ -1,6 +1,2 @@
 {"type":"sensor","name":"h1","name_iot":"sc01","ip":"10.0.0.1","state":"active"}
-{"type":"sensor","name":"h2","name_iot":"sc02","ip":"10.0.0.2","state":"active"}
-{"type":"sensor","name":"h3","name_iot":"sc03","ip":"10.0.0.3","state":"active"}
-{"type":"sensor","name":"h4","name_iot":"sc04","ip":"10.0.0.4","state":"active"}
-{"type":"sensor","name":"h5","name_iot":"sc05","ip":"10.0.0.5","state":"active"}
-{"type":"gateway","name":"h6","name_iot":"g01","ip":"91.121.93.94","state":"active"}
+{"type":"gateway","name":"h2","name_iot":"g01","ip":"192.168.56.4","state":"active"}

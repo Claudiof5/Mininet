@@ -2,15 +2,16 @@
 import time
 import threading
 from mininet.log import info
-from mn_wifi.net import Station
 import paho.mqtt.client as mqtt
 from VARIAVEIS import *
 
-class SmartDevice(Station):
+class SmartDevice:
 
-    def __init__(self, name, publishing_interval, **params):
-        super(SmartDevice, self).__init__(name, **params)
+    def __init__(self, name, ip, publishing_interval = 10):
         
+        
+        self.name = name
+        self.ip = ip
 
         self.is_on = False
         self.is_connected = False
@@ -113,11 +114,12 @@ class SmartDevice(Station):
             #self.start_sending_status_messages()
         except Exception as e:
             info(f"Error connecting to MQTT Broker: {str(e)}\n")
+            print(f"Error connecting to MQTT Broker: {str(e)}\n")
         
     def turn_on(self):
         self.is_on = True
         info(f"{self.name} is on\n")
-        self.start_sending_messages()
+        self.start_sending_status_messages()
 
     def turn_off(self):
         self.is_on = False
@@ -155,3 +157,18 @@ class SmartDevice(Station):
         except Exception as e:
             info(f"Error subscribing to {self.command_topic}: {str(e)}\n")
 
+
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description = 'Params sensors')
+    parser.add_argument('--name'  , action = 'store', dest = 'name'  , required = True)
+    parser.add_argument('--ip'    , action = 'store', dest = 'ip'    , required = True)
+    parser.add_argument('--broker', action = 'store', dest = 'broker', required = True)
+
+    args = parser.parse_args()
+
+    smart_device = SmartDevice(args.name, args.ip)
+    smart_device.connect_with_broker( args.broker )

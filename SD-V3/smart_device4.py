@@ -1,13 +1,15 @@
+
 import time
 import threading
 from mininet.log import setLogLevel, info
-from mn_wifi.cli import CLI
-from mn_wifi.net import Mininet_wifi, Station
+from mininet.cli import CLI
+from mininet.node import Host, Controller
+from mininet.net import Mininet
 import paho.mqtt.client as mqtt
+from mininet.link import Link
 
+class SmartDevice(Host):
 
-class SmartDevice(Station):
- 
     def __init__(self, name, **params):
         super(SmartDevice, self).__init__(name, **params)
         self.broker_ip = None
@@ -34,7 +36,7 @@ class SmartDevice(Station):
     def connect_with_broker(self, broker_ip):
         self.broker_ip = broker_ip
         
-        self.mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        self.mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv311)
         self.mqtt_client.on_message   = self.on_message
         self.mqtt_client.on_connect   = self.on_connect
         self.mqtt_client.on_subscribe = self.on_subscribe
@@ -42,11 +44,9 @@ class SmartDevice(Station):
         info(f"trying to connect to :{broker_ip}")
         try:
 
-            self.mqtt_client.connect(broker_ip, port=1883, keepalive=60)
-            self.mqtt_client.loop_start()
+            self.mqtt_client.connect(broker_ip, port=1883, keepalive=120)
             self.mqtt_client.subscribe("commands")
-            
-            #self.mqtt_client.loop_start()
+            self.mqtt_client.loop_start()
             info(f"{self.name} linked to broker at {self.broker_ip}\n")
             self.connected = True
             self.listen_to_command_messages()
@@ -83,20 +83,15 @@ class SmartDevice(Station):
         self.mqtt_client.subscribe("home/commands")
         self.mqtt_client.on_message = self.on_message
 
-class MQTTServer(Station):
+class MQTTServer(Host):
     def __init__(self, name, **params):
         super(MQTTServer, self).__init__(name, **params)
         self.mqtt_port = 1883
     
     def start_broker(self):
-        
-        def run():
-            command = f'mosquitto -p {self.mqtt_port} -v'
-            retorno = self.cmd(command)
-        thread = threading.Thread(target=run)
-        thread.daemon = True
-        thread.start()
-        info(f"\nopen to messagens in {self.IP()}:{self.mqtt_port}\n")
+        command = f'mosquitto -p {self.mqtt_port} -d -v'
+        retorno = self.cmd(command)
+        info(f"return : {retorno} \nopen to messagens in {self.IP()}:{self.mqtt_port}\n")
 
     def stop_broker(self):
         self.cmd('killall mosquitto')
@@ -104,24 +99,27 @@ class MQTTServer(Station):
 
 
 def topology():
-    net = Mininet_wifi()
-
-    ap1 = net.addAccessPoint('ap1')
-    sta1 :MQTTServer  = net.addStation('sta1', cls=MQTTServer , ip='10.0.0.1')
-    sta2 :SmartDevice = net.addStation("sta2", cls=SmartDevice, ip='10.0.0.2')
-
-    net.configureWifiNodes() 
+    net = Mininet()
+    
+    net.addController(name='c0', controller=Controller, protocol='tcp', port=6633)
+    s1 = net.addSwitch('s1')
+    sta1 :MQTTServer  = net.addHost('sta1', cls=MQTTServer , ip='10.0.0.1')
+    sta2 :SmartDevice = net.addHost("sta2", cls=SmartDevice, ip='10.0.0.2')
 
     #inicia server mqtt
     
 
-    net.addLink(ap1, sta1)
-    net.addLink(ap1, sta2)
+    net.addLink(s1, sta1)
+    net.addLink(s1, sta2)
+
+    net.build()
+    
+
+    
+    
     net.start()
-    #sta1.start_broker()
     
-    
-    
+    sta1.start_broker()
 
     #sta2.connect_with_broker(sta1.IP())
     #sta2.turn_on()

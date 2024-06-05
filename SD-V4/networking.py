@@ -1,15 +1,6 @@
-#!/usr/bin/python
-
-from mininet.net import Mininet
-from mininet.link import TCLink
-from mininet.cli import CLI
-from mininet.log import lg
 from mininet.node import Node
-import time
-import utils_hosts
 
 
-#################################
 def startNAT( root, inetIntf='eth0', subnet='10.0/8' ):
     """Start NAT/forwarding between Mininet and external network
     root: node to access iptables from
@@ -93,62 +84,4 @@ def connectToInternet( network, switch='s1', rootip='10.254', subnet='10.0/8'):
         host.cmd( 'route add default gw', rootip )
 
     return root
-			
-def init_sensors(net):
-	#tipos de sensores no arquivo sensors.py, ex: temperatureSensor, soilmoistureSensor, solarradiationSensor, ledActuator
-	s=utils_hosts.return_hosts_per_type('sensor')
-	ass=utils_hosts.return_association()
 	
-	for i in range(0,len(s)):
-		if((i+1)<10):
-			net.get(s[i].name).cmdPrint('python main.py --name sc0'+str(i+1)+' --broker '+str(ass[i].gateway)+' &')
-		else:
-			net.get(s[i].name).cmdPrint('python main.py --name sc'+str(i+1)+' --broker '+str(ass[i].gateway)+' &')
-		time.sleep(0.2)
-
-def init_flow(net):
-	print ("Temp: Init Flow")
-	g=utils_hosts.return_hosts_per_type('gateway')
-	ass=utils_hosts.return_association()
-	#10seg
-	col=10000
-	pub=10000
-	ind=0
-	for i in range(0,len(g)):
-		for j in range(0,len(ass)):
-			if(g[i].name==ass[j].name_gateway):
-				print(g[i].name+' com '+ass[j].name)
-				# print("mosquitto_pub -h "+str(ass[j].gateway)+" -t 'dev/"+ass[j].name+"' -m '{\"method\":\"flow\", \"sensor\":\""+ass[j].type+"\", \"time\":{\"collect\":"+str(col)+",\"publish\":"+str(pub)+"}}'")
-				# net.get(g[i].name).cmd("mosquitto_pub -h "+str(ass[j].gateway)+" -t 'dev/"+ass[j].name+"' -m '{\"method\":\"flow\", \"sensor\":\""+ass[j].type+"\", \"time\":{\"collect\":"+str(col)+",\"publish\":"+str(pub)+"}}'")
-				# time.sleep(0.5)
-				cmd = (
-					f"python3 publisher.py --broker {str(ass[j].gateway)} --port 1883 "
-					f"--topic dev/{str(ass[j].name)} --method flow --sensor {str(ass[j].type)} "
-					f"--collect {str(col)} --publish {str(pub)}"
-				)
-				print(cmd)
-				net.get(g[i].name).cmd(cmd)
-				ind+=1
-
-
-if __name__ == '__main__':
-	lg.setLogLevel( 'info')
-	net = Mininet(link=TCLink)
-	#criar switches, hosts e topologia
-	import create_topo
-	create_topo.create(net)
-	
-	# Configurar e iniciar comunicacao externa
-	rootnode = connectToInternet( net )
-	
-	#Iniciar sensores virtuais
-	init_sensors(net)
-	
-	#Iniciar fluxo de comunicacao
-	init_flow(net)
-	
-	CLI( net )
-	# Shut down NAT
-	stopNAT( rootnode )
-
-	net.stop()

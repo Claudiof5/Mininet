@@ -1,43 +1,46 @@
 import time
-import threading
 from mininet.log import setLogLevel, info
-from mn_wifi.cli import CLI
-from mn_wifi.net import Mininet_wifi
+from mininet.cli import CLI
+from mininet.net import Mininet
+from networking import connectToInternet, stopNAT
 import paho.mqtt.client as mqtt
 
 from broker import MQTTServer
 from smart_device import SmartDevice
 
+def init_sensors(net):
+
+    for host in net.hosts():
+
+
+
+
+
 def topology():
-    net = Mininet_wifi()
+    net = Mininet()
 
-    ap1 = net.addAccessPoint('ap1')
-    sta1 :MQTTServer  = net.addStation('sta1', cls=MQTTServer , ip='10.0.0.1')
-    sta2 :SmartDevice = net.addStation("sta2", cls=SmartDevice, ip='10.0.0.2')
+    s1 = net.addSwitch('s1')
+    h1 = net.addHost('h1' , ip='10.0.0.1')
+    h2 = net.addHost("h2" , ip='10.0.0.2')
 
-    net.configureWifiNodes()
-
+    h1.cmdPrint( "python3 smart_device.py --name h1 --ip 10.0.0.1 --broker 192.168.56.4")
+    h2.cmdPrint( "python3 broker.py --name h1 --ip 10.0.0.1 --broker 192.168.56.4 --port 1883")
     #inicia server mqtt
     
 
-    net.addLink(ap1, sta1)
-    net.addLink(ap1, sta2)
+    net.addLink(s1, h1)
+    net.addLink(s1, h2)
 
-    sta1.start_broker()
+    net.build()
     net.start()
-    
-    
 
-    sta2.connect_with_broker(sta1.IP())
-    #sta2.turn_on()
-
+    rootnode = connectToInternet( net )
     CLI(net)
-
+    stopNAT( rootnode )
     time.sleep(1)
-    sta2.turn_off()
-    sta1.stop_broker()
     net.stop()
 
 if __name__ == '__main__':
     setLogLevel('info')
     topology()
+

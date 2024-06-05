@@ -1,5 +1,1 @@
-{"name":"sc01","ip":"10.0.0.1","type":"temperatureSensor","gateway":"91.121.93.94","name_gateway":"h6","collect":"15000","publish":"15000"}
-{"name":"sc02","ip":"10.0.0.2","type":"temperatureSensor","gateway":"91.121.93.94","name_gateway":"h6","collect":"15000","publish":"15000"}
-{"name":"sc03","ip":"10.0.0.3","type":"temperatureSensor","gateway":"91.121.93.94","name_gateway":"h6","collect":"15000","publish":"15000"}
-{"name":"sc04","ip":"10.0.0.4","type":"temperatureSensor","gateway":"91.121.93.94","name_gateway":"h6","collect":"15000","publish":"15000"}
-{"name":"sc05","ip":"10.0.0.5","type":"temperatureSensor","gateway":"91.121.93.94","name_gateway":"h6","collect":"15000","publish":"15000"}
+{"name":"sc01","ip":"10.0.0.1","type":"temperatureSensor","gateway":"192.168.56.4","name_gateway":"h2","collect":"15000","publish":"15000"}

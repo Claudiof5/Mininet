@@ -14,7 +14,7 @@ class COMMANDS(Enum):
     turn_off                    = { "code": "TOFF" , "n_params": 0 }
     turn_on                     = { "code": "TON"  , "n_params": 0 }
     disconnect_from_broker      = { "code": "DISC" , "n_params": 0 }
-    start_sending_messages      = { "code": "SRTSM", "n_params": 0 }
+    start_sending_messages      = { "code": "STRSM", "n_params": 0 }
     modify_publishing_topic     = { "code": "MODPT", "n_params": 1 }
     modify_command_topic        = { "code": "MODCT", "n_params": 1 }
     modify_publishing_interval  = { "code": "MODPI", "n_params": 1 }

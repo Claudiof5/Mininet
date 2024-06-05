@@ -6,14 +6,17 @@ import paho.mqtt.client as mqtt
 from VARIAVEIS import *
 from typing import Dict, List
 
-class MQTTServer(Station):
-    def __init__(self, name, topics = [], **params):
-        super(MQTTServer, self).__init__(name, **params)
-        self.mqtt_port = 1883
-        self.ip = self.IP()
+class MQTTServer:
+    def __init__(self, name, ip, broker_ip, broker_port, topics = []):
+        
+        
+        self.name = name
+        self.ip = ip
+        self.broker_ip = broker_ip
+        self.mqtt_port = broker_port
 
         self.config_topic = TOPICO_DE_CONFIGURAR_PADRAO
-        self.standard_topic = self.standard_topic
+        self.standard_topic = TOPICO_PADRAO
         self.command_sulfix = SULFIXO_DE_COMANDO
 
         self.all_topics = [self.config_topic, self.standard_topic].append(topics)
@@ -21,14 +24,6 @@ class MQTTServer(Station):
         self.connected_devices: Dict[str, List[Dict[str, str]]] = {}
         self.mqtt_client = None
         
-    def start_broker(self):
-        command = f'mosquitto -p {self.mqtt_port} -d -v'
-        self.cmd(command)
-        info(f"\nopen to messagens in {self.ip}:{self.mqtt_port}\n")
-        self.start_mqtt_client()
-
-    def stop_broker(self):
-        self.cmd('killall mosquitto')
 
     def on_connect(self, client, userdata, flags, rc):
         print(f"Connected with result code {rc}")
@@ -58,7 +53,7 @@ class MQTTServer(Station):
         self.mqtt_client.on_disconnect = self.on_disconnect
         self.mqtt_client.on_log        = self.on_log
 
-        self.mqtt_client.connect( self.ip(), self.mqtt_port)
+        self.mqtt_client.connect( self.broker_ip, self.mqtt_port)
 
 
     def handle_new_connection(self, msg:str):
@@ -146,3 +141,20 @@ class MQTTServer(Station):
                 self.mqtt_client.subscribe(topic)
             except Exception as e:
                 info(f"Error subscribing to {topic}: {str(e)}\n")
+
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description = 'Params sensors')
+    parser.add_argument('--name'  , action = 'store', dest = 'name'  , required = True)
+    parser.add_argument('--ip'    , action = 'store', dest = 'ip'    , required = True)
+    parser.add_argument('--broker', action = 'store', dest = 'broker', required = True)
+    parser.add_argument('--port'  , action = 'store', dest = 'port'  , required = True)
+
+    args = parser.parse_args()
+
+    server = MQTTServer(args.name, str(args.ip), str(args.broker), str(args.port))
+    server.start_mqtt_client()
+    
