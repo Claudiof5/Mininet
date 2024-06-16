@@ -19,18 +19,34 @@ class COMMANDS(Enum):
     modify_command_topic        = { "code": "MODCT", "n_params": 1 }
     modify_publishing_interval  = { "code": "MODPI", "n_params": 1 }
     change_name                 = { "code": "NAME" , "n_params": 1 }
+    echo                        = { "code": "ECHO" , "n_params": 1 }
+    
+    @property
+    def code(self):
+        return self.value["code"]
+
+    @property
+    def n_params(self):
+        return self.value["n_params"]
+
 
 class MESSAGE_STRUCTURE(Enum):
     src_device_index       = 0
     msg_type_index         = 1
     msg_params_start_index = 2
+    
 
 class MESSAGES(Enum):
     first_connection            = { "code": "HELLO" , "n_params": 1 }
     status_n                    = { "code": "ST"    , "n_params": 2 }
     disconnect                  = { "code": "BYE"   , "n_params": 0 }
+    @property
+    def code(self):
+        return self.value["code"]
 
-
+    @property
+    def n_params(self):
+        return self.value["n_params"]
 
 class ADRESS(Enum):
     address_all_devices = "ALL"

@@ -1,7 +1,6 @@
 import time
 import threading
 from mininet.log import info
-from mn_wifi.net import Station
 import paho.mqtt.client as mqtt
 from VARIAVEIS import *
 from typing import Dict, List
@@ -19,8 +18,8 @@ class MQTTServer:
         self.standard_topic = TOPICO_PADRAO
         self.command_sulfix = SULFIXO_DE_COMANDO
 
-        self.all_topics = [self.config_topic, self.standard_topic].append(topics)
-
+        self.all_topics = [self.config_topic, self.standard_topic]
+        self.all_topics.extend(topics)
         self.connected_devices: Dict[str, List[Dict[str, str]]] = {}
         self.mqtt_client = None
         
@@ -32,17 +31,19 @@ class MQTTServer:
         print(f"Disconnected with result code {rc}")
 
     def on_message(self, mqttc, obj, msg: mqtt.MQTTMessage):
-        print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
+        
+        payload_str = msg.payload.decode('utf-8')
+        print(msg.topic + " " + str(msg.qos) + " " + str(payload_str))
 
         if msg.topic == self.config_topic:
-            self.handle_new_connection(msg.payload)
+            self.handle_new_connection(payload_str)
         else:
-            self.log_message(msg.payload)
+            self.log_message(payload_str)
 
-    def on_subscribe(mqttc, obj, mid, reason_code_list, properties):
+    def on_subscribe(self, mqttc, obj, mid, reason_code_list, properties):
         print("Subscribed: " + str(mid) + " " + str(reason_code_list))
 
-    def on_log(mqttc, obj, level, string):
+    def on_log(self, mqttc, obj, level, string):
         print(string)
 
     def start_mqtt_client(self):
@@ -54,7 +55,16 @@ class MQTTServer:
         self.mqtt_client.on_log        = self.on_log
 
         self.mqtt_client.connect( self.broker_ip, self.mqtt_port)
-
+        print(self.all_topics)
+        for topic in self.all_topics:
+            
+            self.subscribe_to_topic(topic)
+            
+    def subscribe_to_topic(self, topic):
+        try:
+            self.mqtt_client.subscribe(topic)
+        except Exception as e:
+            print(f"Error subscribing to {topic}: {str(e)}\n")
 
     def handle_new_connection(self, msg:str):
         msg_list = msg.split(" ")
@@ -63,7 +73,7 @@ class MQTTServer:
         msg_type        = msg_list[MESSAGE_STRUCTURE.msg_type_index]
         msg_params      = msg_list[MESSAGE_STRUCTURE.msg_params_start_index]
 
-        if msg_type == MESSAGES.first_connection:
+        if msg_type == MESSAGES.first_connection.code:
             device_type = msg_params[0]
             if device_type not in self.connected_devices.keys():
                 self.connected_devices[device_type] = [f"{device_type}-0"]
@@ -76,8 +86,11 @@ class MQTTServer:
                 command_topic =  self.config_topic + self.command_sulfix
 
                 self.send_command_chage_device_name( command_topic, msg_sender_name, nome)
+                time.sleep(1)
                 self.send_command_change_device_pub_topic( command_topic, nome, self.standard_topic)
+                time.sleep(1)
                 self.send_command_change_device_comm_topic( command_topic, nome, self.standard_topic+self.command_sulfix)
+                time.sleep(1)
 
 
     def change_device_name(self, device:str, new_name ):
@@ -114,16 +127,16 @@ class MQTTServer:
 
 
     def send_command_chage_device_name( self, topic, device, device_new_name):
-        command_modify_name  = f"{device} {COMMANDS.change_name} {device_new_name}"
+        command_modify_name  = f"{device} {COMMANDS.change_name.code} {device_new_name}"
         self.send_message( topic, command_modify_name )
 
     def send_command_change_device_pub_topic( self, topic, device, new_topic):
-        command_modify_pub_topic  = f"{device} {COMMANDS.modify_publishing_topic} {new_topic}"
+        command_modify_pub_topic  = f"{device} {COMMANDS.modify_publishing_topic.code} {new_topic}"
         self.send_message( topic, command_modify_pub_topic )
 
     
     def send_command_change_device_comm_topic( self, topic, device, new_topic):
-        command_modify_comm_topic  = f"{device} {COMMANDS.modify_command_topic} {new_topic}"
+        command_modify_comm_topic  = f"{device} {COMMANDS.modify_command_topic.code} {new_topic}"
         self.send_message( topic, command_modify_comm_topic )
 
 
@@ -155,6 +168,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    server = MQTTServer(args.name, str(args.ip), str(args.broker), str(args.port))
+    server = MQTTServer(args.name, str(args.ip), str(args.broker), int(args.port))
     server.start_mqtt_client()
+    
+    i = input("press enter to kill")
+    if i:
+        del server
     
