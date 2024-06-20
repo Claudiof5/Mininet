@@ -8,23 +8,25 @@ class to_object(object):
 			
 
 def return_hosts():
-	f=open('data_hosts.json','r')
-	lines=len(f.readlines())
-	f.close()
-	f=open('data_hosts.json','r')
-	st2=[]
-	st2=f.readlines()
-	f.close()
-	hosts=[]
-	for i in range(0,(lines)):
-		hosts.append(to_object(st2[i]))
-	return hosts
+    with open('/home/mininet/sim/data_hosts.json', 'r') as f:
+        st2 = f.readlines()
+        
+    hosts = []
+    for i, line in enumerate(st2):
+        try:
+            if line.strip():  # Skip empty lines
+                host = to_object(line)
+                hosts.append(host)
+        except json.JSONDecodeError as e:
+            print(f"Error parsing line {i+1}: {e}")
+            print(f"Content: {line}")
+    return hosts
 
 def return_association():
-	f=open('association_hosts.json','r')
+	f=open('/home/mininet/sim/association_hosts.json','r')
 	lines=len(f.readlines())
 	f.close()
-	f=open('association_hosts.json','r')
+	f=open('/home/mininet/sim/association_hosts.json','r')
 	st2=[]
 	st2=f.readlines()
 	f.close()
@@ -44,7 +46,7 @@ def return_hosts_per_type(type_host):
 
 	
 def write_host(st):
-	x=open('data_hosts.json','a')
+	x=open('/home/mininet/sim/data_hosts.json','a')
 	x.write(st+"\n")
 	x.close()
 

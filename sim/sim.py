@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import os
 from mininet.net import Mininet
 from mininet.link import TCLink
 from mininet.cli import CLI
@@ -98,12 +99,14 @@ def init_sensors(net):
 	#tipos de sensores no arquivo sensors.py, ex: temperatureSensor, soilmoistureSensor, solarradiationSensor, ledActuator
 	s=utils_hosts.return_hosts_per_type('sensor')
 	ass=utils_hosts.return_association()
-	
+	if not os.path.exists('logs'):
+		os.makedirs('logs')
 	for i in range(0,len(s)):
+		log_file = f'logs/sc{i+1:02d}.txt'
 		if((i+1)<10):
-			net.get(s[i].name).cmdPrint('python main.py --name sc0'+str(i+1)+' --broker '+str(ass[i].gateway)+' &')
+			net.get(s[i].name).cmdPrint('python main.py --name sc0'+str(i+1)+' --broker '+str(ass[i].gateway)+ f' > {log_file} 2>&1'+' &')
 		else:
-			net.get(s[i].name).cmdPrint('python main.py --name sc'+str(i+1)+' --broker '+str(ass[i].gateway)+' &')
+			net.get(s[i].name).cmdPrint('python main.py --name sc'+str(i+1)+' --broker '+str(ass[i].gateway)+ f' > {log_file} 2>&1'+' &')
 		time.sleep(0.2)
 
 def init_flow(net):
@@ -111,20 +114,20 @@ def init_flow(net):
 	g=utils_hosts.return_hosts_per_type('gateway')
 	ass=utils_hosts.return_association()
 	#10seg
-	col=10000
-	pub=10000
+	col=10
+	pub=10
 	ind=0
+	if not os.path.exists('logs/pub'):
+		os.makedirs('logs/pub')
 	for i in range(0,len(g)):
 		for j in range(0,len(ass)):
 			if(g[i].name==ass[j].name_gateway):
 				print(g[i].name+' com '+ass[j].name)
-				# print("mosquitto_pub -h "+str(ass[j].gateway)+" -t 'dev/"+ass[j].name+"' -m '{\"method\":\"flow\", \"sensor\":\""+ass[j].type+"\", \"time\":{\"collect\":"+str(col)+",\"publish\":"+str(pub)+"}}'")
-				# net.get(g[i].name).cmd("mosquitto_pub -h "+str(ass[j].gateway)+" -t 'dev/"+ass[j].name+"' -m '{\"method\":\"flow\", \"sensor\":\""+ass[j].type+"\", \"time\":{\"collect\":"+str(col)+",\"publish\":"+str(pub)+"}}'")
-				# time.sleep(0.5)
+				log_file = f"logs/pub/{str(ass[j].name)}.txt"
 				cmd = (
-					f"python3 publisher.py --broker {str(ass[j].gateway)} --port 1883 "
+					f"python3 publisher.py --name {str(ass[j].name)} --broker {str(ass[j].gateway)} --port 1883 "
 					f"--topic dev/{str(ass[j].name)} --method flow --sensor {str(ass[j].type)} "
-					f"--collect {str(col)} --publish {str(pub)}"
+					f"--collect {str(col)} --publish {str(pub)} > {log_file} 2>&1 &"
 				)
 				print(cmd)
 				net.get(g[i].name).cmd(cmd)
