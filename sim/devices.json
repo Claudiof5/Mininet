@@ -1,0 +1,52 @@
+[
+    {
+        "name_iot": "SALA_SENSOR_PRESENCA-005",
+        "devId": "disp79729954aa89e636cd4520b72c1d232d",
+        "type": "sensor",
+        "productKey": "0s9d8f9s0d8f0s9df8s0f8",
+        "space": "SALA",
+        "name": "h1",
+        "ip": "10.0.0.1",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "SALA_AR_CONDICIONADO-002",
+        "devId": "disp0680fc31bb92d4d1e6c684ad4463a19e",
+        "type": "atuador",
+        "productKey": "s45f3s6f890sdfs876f8sd7d",
+        "space": "SALA",
+        "name": "h2",
+        "ip": "10.0.0.2",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "SALA_SOM-004",
+        "devId": "disp3f1c5d8514b404c9feaf026d08895dfe",
+        "type": "atuador",
+        "productKey": "9d8s6gfd7fgsd7f9798ds87g",
+        "space": "SALA",
+        "name": "h3",
+        "ip": "10.0.0.3",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "SALA_LAMPADA-003",
+        "devId": "dispb5c3ad38ecac1fe985c8669d8b85d8bf",
+        "type": "atuador",
+        "productKey": "435a6fsdfsdfs879s9fs7",
+        "space": "SALA",
+        "name": "h4",
+        "ip": "10.0.0.4",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "SALA_TV-001",
+        "devId": "disp78a3c40c30b366d0e9f2fd6faa2676ed",
+        "type": "atuador",
+        "productKey": "9s87f98s79s87df98d7f98d",
+        "space": "SALA",
+        "name": "h5",
+        "ip": "10.0.0.5",
+        "broker_ip": "137.135.83.217"
+    }
+]

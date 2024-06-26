@@ -3,6 +3,7 @@ import os
 import time
 import paho.mqtt.client as mqtt
 import argparse
+import json
 
 def on_connect(client, userdata, flags, rc, properties=None):
     if rc == 0:
@@ -10,13 +11,8 @@ def on_connect(client, userdata, flags, rc, properties=None):
     else:
         print(f"Failed to connect, return code {rc}")
 
-def on_publish(client, userdata, mid, reason_code, properties):
-    pass
-
 def publish_message(client, topic, message):
-    result = client.publish(topic, message)
-    if result.rc != mqtt.MQTT_ERR_SUCCESS:
-        print(f"Failed to publish message to {topic}: {mqtt.error_string(result.rc)}")
+    client.publish(topic, message)
 
 def connect_with_retry(client, broker, port, retries=5, delay=5):
     attempt = 0
@@ -32,34 +28,40 @@ def connect_with_retry(client, broker, port, retries=5, delay=5):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='MQTT Publisher')
-    parser.add_argument('--df', type=str, default="trafego.csv", help='Dataset de tráfego')
+    parser.add_argument('--name', type=str, default="sc01", help='Sensor name')
     parser.add_argument('--broker', type=str, default="137.135.83.217", help='MQTT broker address')
     parser.add_argument('--port', type=int, default=1883, help='MQTT broker port')
+    parser.add_argument('--topic', type=str, default="dev/sc01", help='MQTT topic')
+    parser.add_argument('--publish', type=int, default=10, help='Publish time')
 
     args = parser.parse_args()
-    csv_file_path = os.path.join('datasets-test', f'{args.df}')
+    csv_file_path = os.path.join('datasets-test', f'{args.name}.csv')
 
     if not os.path.exists(csv_file_path):
-        print(f"CSV file for sensor {csv_file_path} does not exist.")
+        print(f"CSV file for sensor {args.name} does not exist.")
         exit(1)
 
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
     client.on_connect = on_connect
-    client.on_publish = on_publish
-    client.enable_logger()  
-    
+
     if connect_with_retry(client, args.broker, args.port):
         client.loop_start()
 
-        with open(csv_file_path, 'r', encoding='utf-8') as csvfile:
+        with open(csv_file_path, 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                message = row['message']
-                topic = f"/dev/{row['space']}/{row['device']}"
-                publish_message(client, topic, message)
-                sleep_duration = float(row['sim_period'])
-                time.sleep(sleep_duration)
-                
+                message = {
+                    "date_time": row["date_time"],
+                    "epoch": row["epoch"],
+                    "moteid": row["moteid"],
+                    "temperature": row["temperature"],
+                    "humidity": row["humidity"],
+                    "light": row["light"],
+                    "voltage": row["voltage"]
+                }
+                publish_message(client, args.topic, json.dumps(message))
+                time.sleep(args.publish)
+
         client.loop_stop()
         client.disconnect()
     else:

@@ -1,0 +1,380 @@
+[
+    {
+        "name_iot": "sc01",
+        "type": "sensor",
+        "name": "h1",
+        "ip": "10.0.0.1",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc02",
+        "type": "sensor",
+        "name": "h2",
+        "ip": "10.0.0.2",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc03",
+        "type": "sensor",
+        "name": "h3",
+        "ip": "10.0.0.3",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc04",
+        "type": "sensor",
+        "name": "h4",
+        "ip": "10.0.0.4",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc05",
+        "type": "sensor",
+        "name": "h5",
+        "ip": "10.0.0.5",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc06",
+        "type": "sensor",
+        "name": "h6",
+        "ip": "10.0.0.6",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc07",
+        "type": "sensor",
+        "name": "h7",
+        "ip": "10.0.0.7",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc08",
+        "type": "sensor",
+        "name": "h8",
+        "ip": "10.0.0.8",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc09",
+        "type": "sensor",
+        "name": "h9",
+        "ip": "10.0.0.9",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc10",
+        "type": "sensor",
+        "name": "h10",
+        "ip": "10.0.0.10",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc11",
+        "type": "sensor",
+        "name": "h11",
+        "ip": "10.0.0.11",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc12",
+        "type": "sensor",
+        "name": "h12",
+        "ip": "10.0.0.12",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc13",
+        "type": "sensor",
+        "name": "h13",
+        "ip": "10.0.0.13",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc14",
+        "type": "sensor",
+        "name": "h14",
+        "ip": "10.0.0.14",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc15",
+        "type": "sensor",
+        "name": "h15",
+        "ip": "10.0.0.15",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc16",
+        "type": "sensor",
+        "name": "h16",
+        "ip": "10.0.0.16",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc17",
+        "type": "sensor",
+        "name": "h17",
+        "ip": "10.0.0.17",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc18",
+        "type": "sensor",
+        "name": "h18",
+        "ip": "10.0.0.18",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc19",
+        "type": "sensor",
+        "name": "h19",
+        "ip": "10.0.0.19",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc20",
+        "type": "sensor",
+        "name": "h20",
+        "ip": "10.0.0.20",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc21",
+        "type": "sensor",
+        "name": "h21",
+        "ip": "10.0.0.21",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc22",
+        "type": "sensor",
+        "name": "h22",
+        "ip": "10.0.0.22",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc23",
+        "type": "sensor",
+        "name": "h23",
+        "ip": "10.0.0.23",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc24",
+        "type": "sensor",
+        "name": "h24",
+        "ip": "10.0.0.24",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc25",
+        "type": "sensor",
+        "name": "h25",
+        "ip": "10.0.0.25",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc26",
+        "type": "sensor",
+        "name": "h26",
+        "ip": "10.0.0.26",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc27",
+        "type": "sensor",
+        "name": "h27",
+        "ip": "10.0.0.27",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc28",
+        "type": "sensor",
+        "name": "h28",
+        "ip": "10.0.0.28",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc29",
+        "type": "sensor",
+        "name": "h29",
+        "ip": "10.0.0.29",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc30",
+        "type": "sensor",
+        "name": "h30",
+        "ip": "10.0.0.30",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc31",
+        "type": "sensor",
+        "name": "h31",
+        "ip": "10.0.0.31",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc32",
+        "type": "sensor",
+        "name": "h32",
+        "ip": "10.0.0.32",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc33",
+        "type": "sensor",
+        "name": "h33",
+        "ip": "10.0.0.33",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc34",
+        "type": "sensor",
+        "name": "h34",
+        "ip": "10.0.0.34",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc35",
+        "type": "sensor",
+        "name": "h35",
+        "ip": "10.0.0.35",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc36",
+        "type": "sensor",
+        "name": "h36",
+        "ip": "10.0.0.36",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc37",
+        "type": "sensor",
+        "name": "h37",
+        "ip": "10.0.0.37",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc38",
+        "type": "sensor",
+        "name": "h38",
+        "ip": "10.0.0.38",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc39",
+        "type": "sensor",
+        "name": "h39",
+        "ip": "10.0.0.39",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc40",
+        "type": "sensor",
+        "name": "h40",
+        "ip": "10.0.0.40",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc41",
+        "type": "sensor",
+        "name": "h41",
+        "ip": "10.0.0.41",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc42",
+        "type": "sensor",
+        "name": "h42",
+        "ip": "10.0.0.42",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc43",
+        "type": "sensor",
+        "name": "h43",
+        "ip": "10.0.0.43",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc44",
+        "type": "sensor",
+        "name": "h44",
+        "ip": "10.0.0.44",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc45",
+        "type": "sensor",
+        "name": "h45",
+        "ip": "10.0.0.45",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc46",
+        "type": "sensor",
+        "name": "h46",
+        "ip": "10.0.0.46",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc47",
+        "type": "sensor",
+        "name": "h47",
+        "ip": "10.0.0.47",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc48",
+        "type": "sensor",
+        "name": "h48",
+        "ip": "10.0.0.48",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc49",
+        "type": "sensor",
+        "name": "h49",
+        "ip": "10.0.0.49",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc50",
+        "type": "sensor",
+        "name": "h50",
+        "ip": "10.0.0.50",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc51",
+        "type": "sensor",
+        "name": "h51",
+        "ip": "10.0.0.51",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc52",
+        "type": "sensor",
+        "name": "h52",
+        "ip": "10.0.0.52",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc53",
+        "type": "sensor",
+        "name": "h53",
+        "ip": "10.0.0.53",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "name_iot": "sc54",
+        "type": "sensor",
+        "name": "h54",
+        "ip": "10.0.0.54",
+        "broker_ip": "137.135.83.217"
+    }
+]

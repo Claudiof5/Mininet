@@ -6,7 +6,6 @@ from mininet.link import TCLink
 from mininet.cli import CLI
 from mininet.log import lg
 from mininet.node import Node
-import time
 import utils_hosts
 
 
@@ -96,62 +95,45 @@ def connectToInternet( network, switch='s1', rootip='10.254', subnet='10.0/8'):
     return root
 			
 def init_sensors(net):
-	#tipos de sensores no arquivo sensors.py, ex: temperatureSensor, soilmoistureSensor, solarradiationSensor, ledActuator
-	s=utils_hosts.return_hosts_per_type('sensor')
-	ass=utils_hosts.return_association()
-	if not os.path.exists('logs'):
-		os.makedirs('logs')
-	for i in range(0,len(s)):
-		log_file = f'logs/sc{i+1:02d}.txt'
-		if((i+1)<10):
-			net.get(s[i].name).cmdPrint('python main.py --name sc0'+str(i+1)+' --broker '+str(ass[i].gateway)+ f' > {log_file} 2>&1'+' &')
-		else:
-			net.get(s[i].name).cmdPrint('python main.py --name sc'+str(i+1)+' --broker '+str(ass[i].gateway)+ f' > {log_file} 2>&1'+' &')
-		time.sleep(0.2)
+    sensors=utils_hosts.return_hosts()
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
+    for sensor in sensors:
+        log_file = f'logs/{sensor["name_iot"]}.txt'
+        net.get(sensor["name"]).cmdPrint(f'python main.py --name {sensor["name_iot"]} --space {sensor["space"]} --broker {sensor["broker_ip"]} > {log_file} 2>&1 &')
 
 def init_flow(net):
-	print ("Temp: Init Flow")
-	g=utils_hosts.return_hosts_per_type('gateway')
-	ass=utils_hosts.return_association()
-	#10seg
-	col=10
-	pub=10
-	ind=0
-	if not os.path.exists('logs/pub'):
-		os.makedirs('logs/pub')
-	for i in range(0,len(g)):
-		for j in range(0,len(ass)):
-			if(g[i].name==ass[j].name_gateway):
-				print(g[i].name+' com '+ass[j].name)
-				log_file = f"logs/pub/{str(ass[j].name)}.txt"
-				cmd = (
-					f"python3 publisher.py --name {str(ass[j].name)} --broker {str(ass[j].gateway)} --port 1883 "
-					f"--topic dev/{str(ass[j].name)} --method flow --sensor {str(ass[j].type)} "
-					f"--collect {str(col)} --publish {str(pub)} > {log_file} 2>&1 &"
-				)
-				print(cmd)
-				net.get(g[i].name).cmd(cmd)
-				ind+=1
-
+    print ("Init Flow")
+    hosts=utils_hosts.return_hosts_per_type("sensor")
+    if not os.path.exists('logs/pub'):
+        os.makedirs('logs/pub')
+    for host in hosts:
+        log_file = f"logs/pub/{host['name_iot']}.txt"
+        cmd = (
+            f"python publisher.py --broker {host['broker_ip']} > {log_file} 2>&1 &"
+        )
+        print(cmd)
+        net.get(host['name']).cmd(cmd)
 
 if __name__ == '__main__':
-	lg.setLogLevel( 'info')
-	net = Mininet(link=TCLink)
-	#criar switches, hosts e topologia
-	import create_topo
-	create_topo.create(net)
-	
-	# Configurar e iniciar comunicacao externa
-	rootnode = connectToInternet( net )
-	
-	#Iniciar sensores virtuais
-	init_sensors(net)
-	
-	#Iniciar fluxo de comunicacao
-	init_flow(net)
-	
-	CLI( net )
-	# Shut down NAT
-	stopNAT( rootnode )
+    from create_topo import create
+    lg.setLogLevel( 'info')
+    net = Mininet(link=TCLink)
+    #criar switches, hosts e topologia
 
-	net.stop()
+    create(net)
+
+    # Configurar e iniciar comunicacao externa
+    rootnode = connectToInternet( net )
+
+    #Iniciar sensores virtuais
+    init_sensors(net)
+
+    #Iniciar fluxo de comunicacao
+    init_flow(net)
+
+    CLI( net )
+    # Shut down NAT
+    stopNAT( rootnode )
+
+    net.stop()

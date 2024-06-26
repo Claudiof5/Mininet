@@ -1,1 +1,0 @@
-{"deviceName": "sc01", "mqttPort": 1883, "publish": 10000, "collect": 10000, "topicPrefix": "dev/", "topicErr": "/ERR", "mqttBroker": "192.168.56.5", "mqttPassword": "", "sensors": [{"type": "integer", "name": "temperatureSensor"}], "topicRes": "/RES", "mqttUsername": "", "topicReq": "/REQ"}
