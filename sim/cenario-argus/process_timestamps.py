@@ -1,12 +1,12 @@
-import json
 import csv
 import os
 from datetime import datetime
 
 
-def process_device_file(input_json_file_path, output_csv_file_path, time_format, max_period, real_time: bool = False):
-    with open(input_json_file_path, mode='r', encoding='utf-8') as json_file:
-        rows = [json.loads(line.strip()) for line in json_file]
+def process_device_file(file_path, output_file_path, time_format, max_period, real_time : bool = False):
+    with open(file_path, mode='r', encoding='utf-8') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        rows = list(csv_reader)
 
     rows.sort(key=lambda row: datetime.strptime(row['timeStamp'], time_format))
 
@@ -22,8 +22,8 @@ def process_device_file(input_json_file_path, output_csv_file_path, time_format,
         periods = [diff / max_difference * max_period for diff in differences]
     periods.append(0)
 
-    with open(output_csv_file_path, mode='w', newline='', encoding='utf-8') as file:
-        fieldnames = list(rows[0].keys()) + ['sim_period']
+    with open(output_file_path, mode='w', newline='', encoding='utf-8') as file:
+        fieldnames = csv_reader.fieldnames + ['sim_period']
         csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
         csv_writer.writeheader()
         for row, period in zip(rows, periods):
@@ -31,7 +31,8 @@ def process_device_file(input_json_file_path, output_csv_file_path, time_format,
             csv_writer.writerow(row)
 
 
-file_name = 'messages_published.json'
+
+file_name = 'Cenario_argus1usuario.csv'
 output_file = 'trafego.csv'
 dir = 'datasets-test'
 real_time = True

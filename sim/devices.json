@@ -1,52 +1,82 @@
 [
     {
-        "name_iot": "SALA_SENSOR_PRESENCA-005",
-        "devId": "disp79729954aa89e636cd4520b72c1d232d",
-        "type": "sensor",
-        "productKey": "0s9d8f9s0d8f0s9df8s0f8",
-        "space": "SALA",
+        "environment": "1",
+        "device": "SALA_CAMERA",
+        "devId": "dispa198fa72fd6ca34a411eb4736182e",
+        "productKey": "pz3nimdohyd5fgf4je4aiothfoveeyoh",
+        "message": {
+            "status": [
+                {
+                    "code": "url",
+                    "t": 1719833434.003488,
+                    "value": "https://drive.google.com/file/d/1-QiB3KIPqt_8iWtN9mvWOSHtpq-6-0x1/view?usp=drive_link"
+                }
+            ]
+        },
+        "sensorType": "CAMERA",
+        "timeStamp": "2024-07-01 08:30:34.003488",
         "name": "h1",
         "ip": "10.0.0.1",
         "broker_ip": "137.135.83.217"
     },
     {
-        "name_iot": "SALA_AR_CONDICIONADO-002",
-        "devId": "disp0680fc31bb92d4d1e6c684ad4463a19e",
-        "type": "atuador",
-        "productKey": "s45f3s6f890sdfs876f8sd7d",
-        "space": "SALA",
+        "environment": "1",
+        "device": "SALA_SENSOR_PRESENCA-005",
+        "devId": "disp79729954aa89e636cd4520b72c1d232d",
+        "productKey": "0s9d8f9s0d8f0s9df8s0f8",
+        "message": "{'status': [{'code': 'presence_state', 't': 1712138400.0, 'value': 'ON'}, {'code': 'human_motion_state', 't': 1712138400.0, 'value': 'LARGER_MOVE'}]}",
+        "sensorType": "sensor",
+        "timeStamp": "2024-04-03 07:00:00.233460",
         "name": "h2",
         "ip": "10.0.0.2",
         "broker_ip": "137.135.83.217"
     },
     {
-        "name_iot": "SALA_SOM-004",
-        "devId": "disp3f1c5d8514b404c9feaf026d08895dfe",
-        "type": "atuador",
-        "productKey": "9d8s6gfd7fgsd7f9798ds87g",
-        "space": "SALA",
+        "environment": "1",
+        "device": "SALA_AR_CONDICIONADO-002",
+        "devId": "disp0680fc31bb92d4d1e6c684ad4463a19e",
+        "productKey": "s45f3s6f890sdfs876f8sd7d",
+        "message": "{'status': [{'code': 'switch', 't': 1712138405.0, 'value': 'ON'}, {'code': 'temp_set', 't': 1712138405.0, 'value': 23}, {'code': 'mode', 't': 1712138405.0, 'value': 'AUTO'}]}",
+        "sensorType": "atuador",
+        "timeStamp": "2024-04-03 07:00:05.429825",
         "name": "h3",
         "ip": "10.0.0.3",
         "broker_ip": "137.135.83.217"
     },
     {
-        "name_iot": "SALA_LAMPADA-003",
-        "devId": "dispb5c3ad38ecac1fe985c8669d8b85d8bf",
-        "type": "atuador",
-        "productKey": "435a6fsdfsdfs879s9fs7",
-        "space": "SALA",
+        "environment": "1",
+        "device": "SALA_SOM-004",
+        "devId": "disp3f1c5d8514b404c9feaf026d08895dfe",
+        "productKey": "9d8s6gfd7fgsd7f9798ds87g",
+        "message": "{'status': [{'code': 'switch', 't': 1712138410.0, 'value': 'ON'}, {'code': 'sound_volume', 't': 1712138410.0, 'value': 20}]}",
+        "sensorType": "atuador",
+        "timeStamp": "2024-04-03 07:00:10.657608",
         "name": "h4",
         "ip": "10.0.0.4",
         "broker_ip": "137.135.83.217"
     },
     {
-        "name_iot": "SALA_TV-001",
-        "devId": "disp78a3c40c30b366d0e9f2fd6faa2676ed",
-        "type": "atuador",
-        "productKey": "9s87f98s79s87df98d7f98d",
-        "space": "SALA",
+        "environment": "1",
+        "device": "SALA_LAMPADA-003",
+        "devId": "dispb5c3ad38ecac1fe985c8669d8b85d8bf",
+        "productKey": "435a6fsdfsdfs879s9fs7",
+        "message": "{'status': [{'code': 'switch_led', 't': 1712176225.0, 'value': 'ON'}, {'code': 'bright_value_v2', 't': 1712176225.0, 'value': 1000}, {'code': 'temp_value_v2', 't': 1712176225.0, 'value': 500}]}",
+        "sensorType": "atuador",
+        "timeStamp": "2024-04-03 17:30:25.393668",
         "name": "h5",
         "ip": "10.0.0.5",
+        "broker_ip": "137.135.83.217"
+    },
+    {
+        "environment": "1",
+        "device": "SALA_TV-001",
+        "devId": "disp78a3c40c30b366d0e9f2fd6faa2676ed",
+        "productKey": "9s87f98s79s87df98d7f98d",
+        "message": "{'status': [{'code': 'switch', 't': 1712179890.0, 'value': 'ON'}, {'code': 'sound_volume', 't': 1712179890.0, 'value': 20}]}",
+        "sensorType": "atuador",
+        "timeStamp": "2024-04-03 18:31:30.269455",
+        "name": "h6",
+        "ip": "10.0.0.6",
         "broker_ip": "137.135.83.217"
     }
 ]

@@ -104,7 +104,7 @@ def init_sensors(net):
 
 def init_flow(net):
     print ("Init Flow")
-    hosts=utils_hosts.return_hosts_per_type("sensor")
+    hosts=utils_hosts.return_hosts()
     if not os.path.exists('logs/pub'):
         os.makedirs('logs/pub')
     for host in hosts:
