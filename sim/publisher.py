@@ -55,7 +55,7 @@ if __name__ == "__main__":
             reader = csv.DictReader(csvfile)
             for row in reader:
                 message = row['message']
-                topic = f"/dev/{row['space']}/{row['device']}"
+                topic = f"/devices"
                 publish_message(client, topic, message)
                 sleep_duration = float(row['sim_period'])
                 time.sleep(sleep_duration)
