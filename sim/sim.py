@@ -99,8 +99,8 @@ def init_sensors(net):
     if not os.path.exists('logs'):
         os.makedirs('logs')
     for sensor in sensors:
-        log_file = f'logs/{sensor["name_iot"]}.txt'
-        net.get(sensor["name"]).cmdPrint(f'python main.py --name {sensor["name_iot"]} --space {sensor["space"]} --broker {sensor["broker_ip"]} > {log_file} 2>&1 &')
+        log_file = f'logs/{sensor["devId"]}.txt'
+        net.get(sensor["name"]).cmdPrint(f'python main.py --name {sensor["device"]} --space {sensor["environment"]} --broker {sensor["broker_ip"]} > {log_file} 2>&1 &')
 
 def init_flow(net):
     print ("Init Flow")
@@ -108,9 +108,9 @@ def init_flow(net):
     if not os.path.exists('logs/pub'):
         os.makedirs('logs/pub')
     for host in hosts:
-        log_file = f"logs/pub/{host['name_iot']}.txt"
+        log_file = f"logs/pub/{host['devId']}.txt"
         cmd = (
-            f"python publisher.py --broker {host['broker_ip']} > {log_file} 2>&1 &"
+            f"python publisher.py --devId {host['devId']} --broker {host['broker_ip']} > {log_file} 2>&1 &"
         )
         print(cmd)
         net.get(host['name']).cmd(cmd)

@@ -32,7 +32,8 @@ def connect_with_retry(client, broker, port, retries=5, delay=5):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='MQTT Publisher')
-    parser.add_argument('--df', type=str, default="trafego.csv", help='Dataset de tráfego')
+    parser.add_argument('--df', type=str, default="norm_dataset.csv", help='Dataset de tráfego')
+    parser.add_argument('--devId', type=str, default="", help='Device Id')
     parser.add_argument('--broker', type=str, default="137.135.83.217", help='MQTT broker address')
     parser.add_argument('--port', type=int, default=1883, help='MQTT broker port')
 
@@ -54,10 +55,11 @@ if __name__ == "__main__":
         with open(csv_file_path, 'r', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                message = row['message']
-                topic = f"/devices"
-                publish_message(client, topic, message)
-                sleep_duration = float(row['sim_period'])
+                if row['devId'] == args.devId:
+                    message = f"{row['devId']} => {row['message']}"
+                    topic = f"env1234541/devices"
+                    publish_message(client, topic, message)
+                sleep_duration = float(row['sleep'])
                 time.sleep(sleep_duration)
                 
         client.loop_stop()
