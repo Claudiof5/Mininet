@@ -1,0 +1,1 @@
+2024-07-11 07:15:28,021 Topic device subscribed: env1234541/devices

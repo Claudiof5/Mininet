@@ -6,9 +6,14 @@ from mininet.link import TCLink
 from mininet.cli import CLI
 from mininet.log import lg
 from mininet.node import Node
+from mininet.clean import cleanup
+import argparse
 import utils_hosts
 
-
+parser = argparse.ArgumentParser()
+parser.add_argument('--latency_test', type=bool, default=False)
+parser.add_argument('--server_response_test', type=bool, default=False)
+args = parser.parse_args()
 #################################
 def startNAT( root, inetIntf='eth0', subnet='10.0/8' ):
     """Start NAT/forwarding between Mininet and external network
@@ -94,21 +99,24 @@ def connectToInternet( network, switch='s1', rootip='10.254', subnet='10.0/8'):
 
     return root
 			
-def init_sensors(net):
+def init_sensors(net, n_hosts):
     sensors=utils_hosts.return_hosts()
     if not os.path.exists('logs'):
         os.makedirs('logs')
-    for sensor in sensors:
-        log_file = f'logs/{sensor["name_iot"]}.txt'
-        net.get(sensor["name"]).cmdPrint(f'python main.py --name {sensor["name_iot"]} --space {sensor["space"]} --broker {sensor["broker_ip"]} > {log_file} 2>&1 &')
-
+    for i, sensor in enumerate(sensors):
+        if i >= n_hosts:
+            break
+        log_file = f'logs/{sensor["name"]}.txt'
+        net.get(sensor["name"]).cmdPrint(f'python main.py --name {sensor["name"]} --space {sensor["environment"]} --broker {sensor["broker_ip"]} > {log_file} 2>&1 &')
+        
+            
 def init_flow(net):
     print ("Init Flow")
     hosts=utils_hosts.return_hosts()
     if not os.path.exists('logs/pub'):
         os.makedirs('logs/pub')
     for host in hosts:
-        log_file = f"logs/pub/{host['name_iot']}.txt"
+        log_file = f"logs/pub/{host['name']}.txt"
         cmd = (
             f"python publisher.py --broker {host['broker_ip']} > {log_file} 2>&1 &"
         )
@@ -118,22 +126,62 @@ def init_flow(net):
 if __name__ == '__main__':
     from create_topo import create
     lg.setLogLevel( 'info')
-    net = Mininet(link=TCLink)
-    #criar switches, hosts e topologia
+    
+    if args.latency_test:
+        n_hosts = 2
+        while n_hosts <= 64:
+        
+            net = Mininet(link=TCLink)
+            #criar switches, hosts e topologia
+            create(net, n_hosts)
+            # Configurar e iniciar comunicacao externa
+            rootnode = connectToInternet( net )
 
-    create(net)
+            #Iniciar sensores virtuais
+            init_sensors(net, n_hosts)
+    
+            #Iniciar fluxo de comunicacao
+            #init_flow(net)
+    
+            CLI( net )
+            # Shut down NAT
+            stopNAT( rootnode )
+            net.stop()
+            cleanup()
+            n_hosts *= 2
+    elif args.server_response_test:
+        net = Mininet(link=TCLink)
+        #criar switches, hosts e topologia
+        create(net, 1)
+        # Configurar e iniciar comunicacao externa
+        rootnode = connectToInternet( net )
 
-    # Configurar e iniciar comunicacao externa
-    rootnode = connectToInternet( net )
+        #Iniciar sensores virtuais
+        init_sensors(net, 1)
+    
+        #Iniciar fluxo de comunicacao
+        #init_flow(net)
 
-    #Iniciar sensores virtuais
-    init_sensors(net)
+        CLI( net )
+        # Shut down NAT
+        stopNAT( rootnode )
+        net.stop()
+        cleanup()
+    else:
+    
+        net = Mininet(link=TCLink)
+        #criar switches, hosts e topologia
+        create(net)
+        # Configurar e iniciar comunicacao externa
+        rootnode = connectToInternet( net )
 
-    #Iniciar fluxo de comunicacao
-    init_flow(net)
+        #Iniciar sensores virtuais
+        init_sensors(net)
 
-    CLI( net )
-    # Shut down NAT
-    stopNAT( rootnode )
+        #Iniciar fluxo de comunicacao
+        init_flow(net)
 
-    net.stop()
+        CLI( net )
+        # Shut down NAT
+        stopNAT( rootnode )
+        net.stop()
